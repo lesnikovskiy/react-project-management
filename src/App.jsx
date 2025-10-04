@@ -16,17 +16,39 @@ function App() {
     }));
   }
 
+  function handleAddProject(project) {
+    setProjectstate((state) => ({
+      ...state,
+      selectedProjectId: undefined,
+      projects: [
+        ...state.projects,
+        {
+          ...project,
+          id: Math.random(),
+        },
+      ],
+    }));
+  }
+
   let content;
 
   if (projectsState.selectedProjectId === null) {
-    content = <NewProject onStartAddProject={handleStartAddProject} />;
+    content = (
+      <NewProject
+        onStartAddProject={handleStartAddProject}
+        onAdd={handleAddProject}
+      />
+    );
   } else if (projectsState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
   }
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectSidebar onStartAddProject={handleStartAddProject} />
+      <ProjectSidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectsState.projects}
+      />
       {content}
     </main>
   );
