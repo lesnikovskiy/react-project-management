@@ -5,34 +5,34 @@ import ProjectSidebar from './components/ProjectSidebar';
 import SelectedProject from './components/SelectedProject';
 
 function App() {
-  const [projectsState, setProjectstate] = useState({
+  const [projectsState, setProjectsState] = useState({
     selectedProjectId: undefined,
     projects: [],
   });
 
   function handleSelectProject(selectedProjectId) {
-    setProjectstate((state) => ({
+    setProjectsState((state) => ({
       ...state,
       selectedProjectId,
     }));
   }
 
   function handleStartAddProject() {
-    setProjectstate((state) => ({
+    setProjectsState((state) => ({
       ...state,
       selectedProjectId: null,
     }));
   }
 
   function handleCancleProject() {
-    setProjectstate((state) => ({
+    setProjectsState((state) => ({
       ...state,
       selectedProjectId: undefined,
     }));
   }
 
   function handleAddProject(project) {
-    setProjectstate((state) => ({
+    setProjectsState((state) => ({
       ...state,
       selectedProjectId: undefined,
       projects: [
@@ -45,11 +45,21 @@ function App() {
     }));
   }
 
+  function handleDeleteProject(projectId) {
+    setProjectsState((state) => ({
+      ...state,
+      selectedProjectId: undefined,
+      projects: state.projects.filter((p) => p.id !== projectId),
+    }));
+  }
+
   const selectedProject = projectsState.projects.find(
     (project) => project.id === projectsState.selectedProjectId
   );
 
-  let content = <SelectedProject project={selectedProject} />;
+  let content = (
+    <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
+  );
 
   if (projectsState.selectedProjectId === null) {
     content = (
